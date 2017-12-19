@@ -5,6 +5,7 @@ matrix:
     - os: linux
       env: BUILD_OFFICIAL=1
       sudo: required
+      group: deprecated-2017Q4
       services:
         - docker
     - os: osx
@@ -53,7 +54,7 @@ before_install:
       if [ "$TRAVIS_OS_NAME" = "linux" ]; then
         docker pull dcommander/buildljt;
       fi &&
-      git clone --depth=1 https://github.com/libjpeg-turbo/buildscripts.git -b $TRAVIS_BRANCH ~/src/buildscripts &&
+      git clone --depth=1 https://github.com/libjpeg-turbo/buildscripts.git -b master ~/src/buildscripts &&
       openssl aes-256-cbc -K $encrypted_f92e8533f6f1_key -iv $encrypted_f92e8533f6f1_iv -in ci/keys.enc -out ci/keys -d &&
       tar xf ci/keys &&
       rm ci/keys &&
