@@ -303,7 +303,25 @@ endif()
 # Loongson (Intrinsics)
 ###############################################################################
 
-elseif(CPU_TYPE STREQUAL "loongson")
+elseif(CPU_TYPE STREQUAL "mips64" OR CPU_TYPE STREQUAL "mips64el")
+
+check_c_source_compiles("
+  int main(void) {
+    int c, a;
+    long long b = 0;
+    __asm__ __volatile__ (
+      \"gslq %[c], %[a], 0(%[b])\"
+      : [a] \"r\" (a), [c] \"=r\" (c)
+      : [b] \"r\" (&b)
+    );
+    return c;
+  }" HAVE_LOONGSON_MMI)
+
+if(NOT HAVE_LOONGSON_MMI)
+  simd_fail("SIMD extensions not available for this CPU")
+  return()
+endif()
+
 
 set(SIMD_SOURCES loongson/jccolor-mmi.c loongson/jcsample-mmi.c
   loongson/jdcolor-mmi.c loongson/jdsample-mmi.c loongson/jfdctint-mmi.c
